@@ -6,6 +6,18 @@ Use `yarn dev` to get up and running.
 
 Use `yarn package` to create a standalone executable application for your current system.
 
+## Running the interceptor for ONE-Front
+
+### In the ONE-Front project
+
+- /src/server/index.js, replace all occurances of 8080 with 8082
+- run `yarn dev:proxy`
+
+### In the ONE-Interceptor project
+
+- Run `yarn dev`
+- Set up the configurations in the launchpad and click go
+
 ## Architectural Notes
 
 `/app/` contains all the application code.
