@@ -1,0 +1,10 @@
+.LaunchpadInner {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.hostList {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 16px;
+}

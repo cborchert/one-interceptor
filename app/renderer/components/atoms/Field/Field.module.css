@@ -1,0 +1,19 @@
+.field {
+  display: flex;
+  max-width: 400px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.field > * {
+  flex: 1;
+}
+
+.field > *:not(:last-child) {
+  margin-right: 4px;
+}
+
+.field > button {
+  flex: 0;
+  white-space: nowrap;
+}
