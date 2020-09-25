@@ -1,0 +1,77 @@
+.modal {
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  overflow: scroll;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: white;
+  color: black;
+}
+
+.modalHeader {
+  display: flex;
+  padding: 8px 16px;
+  border-bottom: 1px solid black;
+  background: white;
+  color: black;
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+.modalHeader > * {
+  flex: 1;
+}
+
+.modalHeader > button {
+  flex: 0;
+}
+
+.response,
+.responseHeader {
+  display: grid;
+
+  /* id | Method | Path | Status | Proxy/Mock | Response | ...  */
+  grid-template-columns: 40px 60px 1fr repeat(4, 100px);
+  margin: 4px 0;
+}
+
+.responseHeader {
+  border-bottom: 1px solid currentColor;
+}
+
+.response > * {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 4px 0 0;
+}
+
+.response > *[data-status='200'] {
+  color: #0f0;
+}
+
+.response > *[data-status='500'] {
+  color: #f00;
+}
+
+.response > *[data-origin='proxy'] {
+  color: #ff0;
+}
+
+.response > *[data-origin='mock'] {
+  color: #c0f;
+}
+
+.response button {
+  color: inherit;
+  background: transparent;
+  opacity: 0.5;
+}
+
+.response button:hover,
+.response button:focus {
+  opacity: 1;
+}
