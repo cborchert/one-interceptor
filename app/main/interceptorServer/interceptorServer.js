@@ -5,6 +5,8 @@ import mung from 'express-mung';
 import proxy from 'express-http-proxy';
 import decompress from 'decompress-response';
 
+import { setUseInterceptorConfig } from '../../shared/utils/config';
+
 // TODO: get from settings or inject in constructor
 
 // our created mock server (dyson) props
@@ -155,6 +157,8 @@ export default class InterceptorServer {
     const configs = dyson.getConfigurations(options);
     dyson.registerServices(mocksApp, options, configs);
 
+    setUseInterceptorConfig(true);
+
     this.mocksApp = mocksApp;
     this.mocksServer = mocksServer;
     console.log(`Interceptor mock server listening on port ${mocksPort}`);
@@ -199,5 +203,6 @@ export default class InterceptorServer {
       this.mocksServer.close();
       delete this.mocksApp;
     }
+    setUseInterceptorConfig(false);
   }
 }

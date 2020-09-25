@@ -17,6 +17,7 @@ import log from 'electron-log';
 import _get from 'lodash/get';
 
 import ipcEventTypes from './shared/ipcEventTypes';
+import { setUseInterceptorConfig } from './shared/utils/config';
 import MenuBuilder from './main/menu';
 import InterceptorServer from './main/interceptorServer/interceptorServer';
 
@@ -94,7 +95,16 @@ const createWindow = async () => {
     }
   });
 
+  // clean up
   mainWindow.on('closed', () => {
+    console.log('main window closed, cleaning up');
+    if (server) {
+      // kill any servers
+      server.stop();
+    } else {
+      // otherwise at lease clean up the config file, so that it doesn't use the interceptor
+      setUseInterceptorConfig(false);
+    }
     mainWindow = null;
   });
 

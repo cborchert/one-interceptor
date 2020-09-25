@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import _set from 'lodash/set';
 import _get from 'lodash/get';
-
-import fs from 'fs';
-import settings from 'electron-settings';
 
 import { ipcRenderer } from 'electron';
 
@@ -13,109 +9,19 @@ import Field from '../../atoms/Field/Field';
 
 import ipcEventTypes from '../../../../shared/ipcEventTypes';
 import settingsNames from '../../../../shared/settingsNames';
+import {
+  HOST_PATH,
+  getStringFromSettings,
+  setStringToSettings,
+  getLocalConfig,
+  setLocalConfigProp,
+  getArrayFromSettings,
+  setArrayToSettings,
+  getDomains,
+} from '../../../../shared/utils/config';
 import routes from '../../../constants/routes.json';
 
 import styles from './Launchpad.module.css';
-
-// the path to the simulate host of the config from the local.json root
-const HOST_PATH = 'settings.api.simulateHost';
-
-/**
- * Get the domains
- * @returns {Array} the domains
- */
-const getDomains = (featurebranchPath): Array<string> => {
-  try {
-    const domains = JSON.parse(fs.readFileSync(featurebranchPath, 'utf8'));
-    if (!Array.isArray(domains)) {
-      throw new Error(`"${featurebranchPath}" does not contain an array`);
-    }
-    return domains;
-  } catch {
-    console.log(
-      `Unable to read domains array from JSON file at "${featurebranchPath}"`
-    );
-    return [];
-  }
-};
-
-/**
- * Get a string from the user settings
- */
-const getStringFromSettings = (settingName): string => {
-  const val = settings.getSync(settingName);
-  return typeof val === 'string' ? val : '';
-};
-
-/**
- * Set the user's setting for a string val
- */
-const setStringToSettings = (settingName, val): string => {
-  if (typeof val !== 'string') {
-    settings.setSync(settingName, '');
-    return '';
-  }
-  settings.setSync(settingName, val);
-  return val;
-};
-
-/**
- * Get an array from the user settings
- */
-const getArrayFromSettings = (settingName) => {
-  const val = settings.getSync(settingName);
-  return Array.isArray(val) ? val : [];
-};
-
-/**
- * Set the user's setting for the an array
- */
-const setArrayToSettings = (settingName, val) => {
-  if (!Array.isArray(val)) {
-    settings.setSync(settingName, []);
-    return [];
-  }
-  settings.setSync(settingName, val);
-  return val;
-};
-
-/**
- * Get the contents of the local.json config
- * @returns {Object} the local.config configuration
- */
-const getLocalConfig = (localConfigPath: string): Record<string, any> => {
-  try {
-    const config = JSON.parse(fs.readFileSync(localConfigPath, 'utf8'));
-    if (typeof config !== 'object') {
-      throw new Error(`"${localConfigPath}" does not contain an object`);
-    }
-    return config;
-  } catch {
-    console.log(
-      `Unable to read config object from JSON file at "${localConfigPath}"`
-    );
-    return {};
-  }
-};
-
-const setLocalConfigProp = (
-  localConfigPath: string,
-  path: string,
-  value: any
-) => {
-  try {
-    const config = getLocalConfig(localConfigPath);
-    _set(config, path, value);
-    fs.writeFileSync(localConfigPath, JSON.stringify(config, null, 2), 'utf8');
-    console.log(
-      `Updated config object at "${localConfigPath}". ${path} => ${value}`
-    );
-    return config;
-  } catch {
-    console.log(`Unable to update config object at "${localConfigPath}"`);
-    return getLocalConfig(localConfigPath);
-  }
-};
 
 export default function Launchpad(): JSX.Element {
   const history = useHistory();
